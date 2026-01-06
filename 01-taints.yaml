@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-taint-check
+  labels: #these are deployment labels
+    purpose: taint-demo
+    project: roboshop
+spec:
+  replicas: 3
+  selector:
+    matchLabels: #these labels are used to select pods
+      purpose: taint-demo
+      project: roboshop
+  template: #pod definition
+    metadata:
+      labels:
+        purpose: taint-demo
+        project: roboshop
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
