@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: toleration
+  labels: #these are deployment labels
+    purpose: toleration-check
+    project: roboshop
+spec:
+  replicas: 3
+  selector:
+    matchLabels: #these labels are used to select pods
+      purpose: toleration-check
+      project: roboshop
+  template: #pod definition
+    metadata:
+      labels:
+        purpose: toleration-check
+        project: roboshop
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+      nodeSelector:
+        kubernetes.io/hostname: ip-192-168-37-2.ec2.internal 
+      tolerations:
+      - key: "project"
+        value: "roboshop"
+        operator: "Exists"
+        effect: "NoSchedule"
